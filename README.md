@@ -1,5 +1,8 @@
 # Universal Containerized Development Environment
 
+**Heavy use of claude to get this up and running.**
+Wanted the ability to code completely within the container. Only thing required on the machine is docker. The rest of the app is containerized. node_modules is synced outside the container for intellisense.
+
 A complete framework-agnostic containerized development environment that works across multiple machines with only Git, Docker, and an IDE.
 
 **Supports:** React, Vue, SvelteKit, Next.js, Express.js, Astro, or any Node.js framework
@@ -25,7 +28,7 @@ docker-compose up -d
 When you run `./scripts/dev.sh init`, you can choose from:
 
 - **SvelteKit** (TypeScript)
-- **React** (Vite + TypeScript)  
+- **React** (Vite + TypeScript)
 - **Vue** (Vite + TypeScript)
 - **Next.js** (App Router + TypeScript)
 - **Express.js** (TypeScript)
@@ -35,6 +38,7 @@ When you run `./scripts/dev.sh init`, you can choose from:
 ## 🎯 Why This Setup?
 
 ### **Perfect For:**
+
 - **Work environments** where you can't install runtimes locally
 - **Team consistency** - everyone has identical development environment
 - **Multi-machine development** - laptop, desktop, server, anywhere
@@ -42,6 +46,7 @@ When you run `./scripts/dev.sh init`, you can choose from:
 - **True environment parity** - dev exactly matches production
 
 ### **Key Benefits:**
+
 - ✅ **No local runtime needed** - Node.js, Python, etc. all containerized
 - ✅ **Full IDE intellisense** - Dependencies sync automatically to host
 - ✅ **Cross-machine compatibility** - Just `git pull` + `docker-compose up`
@@ -52,6 +57,7 @@ When you run `./scripts/dev.sh init`, you can choose from:
 ## 📋 Available Commands
 
 ### **Environment Management**
+
 ```bash
 ./scripts/dev.sh start      # Start development environment
 ./scripts/dev.sh build      # Rebuild containers
@@ -61,11 +67,13 @@ When you run `./scripts/dev.sh init`, you can choose from:
 ```
 
 ### **Project Initialization**
+
 ```bash
 ./scripts/dev.sh init       # Interactive framework selection
 ```
 
 ### **Package Management**
+
 ```bash
 # Add regular dependencies
 ./scripts/dev.sh add tailwindcss
@@ -85,6 +93,7 @@ When you run `./scripts/dev.sh init`, you can choose from:
 ```
 
 ### **Database**
+
 ```bash
 ./scripts/dev.sh db         # Connect to PostgreSQL
 ```
@@ -92,30 +101,34 @@ When you run `./scripts/dev.sh init`, you can choose from:
 ## 🔧 Customization
 
 ### **Remove Database**
+
 If you don't need PostgreSQL:
 
 1. Remove the `db` service from `docker-compose.yml`
 2. Remove database-related environment variables
 
 ### **Change Runtime**
+
 To use Node.js instead of Bun:
 
 1. Change `FROM oven/bun:1` to `FROM node:20` in `Dockerfile`
 2. Replace `bun` commands with `npm` in `scripts/dev.sh`
 
 ### **Add Services**
+
 Need Redis, MongoDB, etc.? Add them to `docker-compose.yml`:
 
 ```yaml
 redis:
   image: redis:alpine
   ports:
-    - "6379:6379"
+    - '6379:6379'
 ```
 
 ## 🔄 Cross-Machine Workflow
 
 ### **Machine A (Development)**
+
 ```bash
 # Code, add dependencies, commit
 ./scripts/dev.sh add some-package
@@ -125,6 +138,7 @@ git push
 ```
 
 ### **Machine B (Continue Development)**
+
 ```bash
 # Pull and continue seamlessly
 git pull
@@ -133,6 +147,7 @@ docker-compose up -d
 ```
 
 ### **No Manual Setup Required**
+
 - No Node.js installation
 - No dependency version conflicts
 - No "works on my machine" issues
@@ -141,16 +156,19 @@ docker-compose up -d
 ## 🐳 Container Details
 
 ### **Volume Strategy**
+
 - **Source code**: Bind mounted for live editing
 - **Dependencies**: Named volume for performance + sync to host for IDE
 - **Database**: Persistent volume for data retention
 
 ### **Port Mapping**
+
 - **5173**: Web development server (Vite/SvelteKit)
 - **3000**: Alternative development port (Next.js/Express)
 - **5432**: PostgreSQL (exposed for database tools)
 
 ### **User Permissions**
+
 - Container runs as `bun` user (UID 1000)
 - Files are owned by your host user for easy editing
 - No permission conflicts between container and host
@@ -161,7 +179,7 @@ docker-compose up -d
 dockerized-init/
 ├── Dockerfile              # Container definition
 ├── docker-compose.yml      # Development environment
-├── docker-compose.prod.yml # Production overrides  
+├── docker-compose.prod.yml # Production overrides
 ├── scripts/
 │   └── dev.sh             # Development helper
 ├── .env.example           # Environment variables template
@@ -187,25 +205,29 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --build
 This is a template/framework meant to be copied and customized. Feel free to:
 
 1. **Fork** for your own projects
-2. **Modify** for your specific needs  
+2. **Modify** for your specific needs
 3. **Share** improvements back to the community
 
 ## 🔧 Troubleshooting
 
 ### **Dependencies not showing in IDE**
+
 ```bash
 ./scripts/dev.sh sync
 ```
 
 ### **Permission issues**
+
 ```bash
 docker-compose exec --user root app chown -R bun:bun /app
 ```
 
 ### **Port conflicts**
+
 Edit port mappings in `docker-compose.yml`
 
 ### **Clean restart**
+
 ```bash
 ./scripts/dev.sh clean
 ./scripts/dev.sh start
